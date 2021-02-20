@@ -12,6 +12,7 @@ each day is represented by a folder \
 Some of the puzzles are written with different languages: \
 - ** C **
 - ** Java **
+- ** C++ **
 
 ## What days i have finished?
 * day1
@@ -27,6 +28,9 @@ Some of the puzzles are written with different languages: \
 * day11
 * day12
 * day13
+* day14
+* day15 - only part 1
+* day16 <--- i am here
 
 ### Important notices
 - note that in some puzzles you have to set the size in the code itself in order to make it run your input too.
