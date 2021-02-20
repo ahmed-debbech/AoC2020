@@ -2,94 +2,98 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct{
-    long num;
-    long last_seen;
-}entry;
-
-long * get_data(long * m, entry ** uni, long *size1){
+void get_data(long * m, long *size){
     FILE * f = fopen("input.txt", "r");
-    long * arr = malloc(sizeof(long) * ((*m)+1));
     if(f != NULL){
         char str[100];
         int i=0;
-        *m=0;
         fgets(str, 100, f);
         printf("%s\n", str);
         char buf[4] = "";
         for(i=0; i<=strlen(str); i++){
             if((str[i] == ',') || (str[i] == '\0')){
-                arr[*m] = atoi(buf);
+                m[atoi(buf)] = (*size);
                 strcpy(buf, "");
-                (*m)++;
-                arr = realloc(arr, sizeof(long) * ((*m)+1));
+                (*size)++;
             }else{
                 strncat(buf, &str[i], 1);
             }
         }
-        for(i=0; i<=(*m)-1; i++){
-            (*uni)[*size1].num = arr[i];
-            (*uni)[*size1].last_seen = i;
-            (*size1)++;
-            *uni = realloc(*uni, sizeof(entry) * ((*size1)+1));
+        fclose(f);
+    }
+}
+long guess_number(long size){
+    FILE * f = fopen("input.txt", "r");
+    long mm[50];
+    int o=0;
+    if(f != NULL){
+        char str[100];
+        fgets(str, 100, f);
+        char buf[4] = "";
+        for(int i=0; i<=strlen(str); i++){
+            if((str[i] == ',') || (str[i] == '\0')){
+                mm[o] = atoi(buf);
+                o++;
+                strcpy(buf, "");
+            }else{
+                strncat(buf, &str[i], 1);
+            }
         }
         fclose(f);
     }
-    return arr;
-}
-long say_age_or_0(long index, long number_look, entry uni[], long size){
-    for(long k =0; k<=size-1; k++){
-        if(number_look == uni[k].num){
-            if((index - uni[k].last_seen) == 0){
-                return 0;
+    for(long i=0; i<=4; i++){printf("[array] turn: %ld",mm[i]);}
+    long m[size];
+    for(long i=0; i<=size; i++){
+        m[i] = -1;
+    }
+    long h=0;
+    long last;
+    int b = 1;
+    long curr;
+    int ff = o;
+    for(int g=0; g<=o; g++){
+        m[mm[o]] = g;
+
+    }
+    for(h=0; h<=size; h++){
+        if(h <= o){
+            m[mm[h]] = h;
+            if(h == o){
+                m[mm[h]] = -1; 
+                last = mm[h];
+            }
+        }else{
+            curr = -1;
+            if(m[last] != -1){
+                printf("ewdfij %ld\n", m[last]);
+                curr = (h-1) - m[last];
+                m[last] = curr; 
             }else{
-                return index - uni[k].last_seen;
+                printf("epep\n");
+                m[last] = h-1;
+                curr = 0;
+            }
+            if(curr == size){
+                //last = m[curr];
+                printf("RESS ======== %ld\n", m[curr]);
             }
         }
+        last = curr;
     }
-    return -1; //it is a new number should be added to UNI
-}
-int guess_number(long * arr, long size, entry ** uni, long * size1){
-    long index = size;
-    long h = say_age_or_0(index-1, arr[index-1] ,*uni, *size1);
-    if(h == -1){
-        (*size1)++;
-        *uni = realloc(*uni, sizeof(entry) * (*size1));
-        (*uni)[(*size1)-1].num = arr[index-1];
-        (*uni)[(*size1-1)].last_seen = index-1;
-        return 0;
-    }
-    if(h == 0){
-        return 0;
-    }else{
-        for(int i=0; i<=((*size1)-1); i++){
-            if(arr[index-1] == (*uni)[i].num){
-                (*uni)[i].last_seen = index-1;
-            }
-        }
-        return h;
-    }
-    return 0;
+    for(long i=0; i<=size; i++){printf("[array] turn: %ld - spoken: %ld\n", i, m[i]);}
+    return last;
 }
 int main(){
-    //line 24 go see
     long size = 0;
-    long * arr = NULL;
-    long size_sec=0;
-    entry * unique = malloc(sizeof(entry)*1);
-    arr = get_data(&size, &unique, &size_sec);
-    //for(long h=0; h<=10; h++){printf("@count (%ld) = arr: %ld + occ: %ld\n", h+1, unique[h].num, unique[h].last_seen);}
-
-    for(long i=size; i<=30000000; i++){
-        printf("counter: %ld\n", i);
-        long num = guess_number(arr, size, &unique, &size_sec);
-        size++;
-        arr = realloc(arr, sizeof(long) * size);
-        arr[size-1] = num;
+    const long max = 6;
+    long * arr = malloc(sizeof(long) * max);
+    for(long i=0; i<=max; i++){
+        arr[i] = -1;
     }
-    for(long h=0; h<=size_sec-1; h++){printf("count (%ld) = arr: %ld + occ: %ld\n", h+1, unique[h].num, unique[h].last_seen);}
-    printf("--------\n");
-    for(long h=0; h<=size-1; h++){printf("count (%ld) = arr: %ld\n", h+1, arr[h]);}
-    printf("THE RESULT IS: %ld\n", arr[2019]);
+    printf("THE RESULT IS: \n");
+    //get_data(arr, &size);
+    long res = guess_number(max);
+    //for(long h=0; h<=size-1; h++){printf("count (%ld) = arr: %ld\n", h+1, arr[h]);}
+    printf("THE RESULT IS: %ld\n", res);
     return 0;
 }
