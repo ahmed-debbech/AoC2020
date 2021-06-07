@@ -30,7 +30,8 @@ Some of the puzzles are written with different languages: \
 * day13
 * day14
 * day15 - only part 1
-* day16 <--- i am here
+* day16
+* day22 - only part 1
 
 ### Important notices
 - note that in some puzzles you have to set the size in the code itself in order to make it run your input too.
